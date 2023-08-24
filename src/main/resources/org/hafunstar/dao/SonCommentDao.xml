@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hafunstar.dao.SonCommentDao">
+    <!--配置数据库表和java类的映射-->
+    <resultMap id="UncommentMap" type="SonComment">
+        <!--主键配置-->
+        <id property="sonCommentId" column="s_id"></id>
+        <!--非主键-->
+        <result property="fatherCommentId" column="father_cid"></result>
+        <result property="commentContent" column="s_content"></result>
+        <result property="commentTime" column="s_time"></result>
+        <result property="sonCommentShow" column="s_show"></result>
+        <association property="comUser" javaType="Account">
+            <id column="uid" property="accountId"></id>
+            <result column="uname" property="accountName"></result>
+        </association>
+        <association property="replyUser" javaType="Account" >
+            <id column="eid" property="accountId"></id>
+            <result column="replyname" property="accountName"></result>
+        </association>
+    </resultMap>
+
+    <select id="findFidToComment" resultMap="UncommentMap" >
+        select
+            s.s_id,
+            s.father_cid,
+            s.s_content,
+            s.s_time,
+            s.s_show,
+            u.u_id AS uid,
+            u.u_username AS uname,
+            e.u_id AS eid,
+            e.u_username AS replyname
+        from son_comment s JOIN users u ON s.uid = u.u_id
+            JOIN users e ON s.reply_uid = e.u_id
+        where s.father_cid = #{cid} and uname = #{rev};
+
+    </select>
+
+    <insert id="saveSonComment" parameterType="SonComment">
+        insert into son_comment(father_cid,s_content,s_time,uid,reply_uid,s_show)
+        values(#{fatherCommentId},#{commentContent},#{commentTime},#{comUser.accountId},#{replyUser.accountId},#{sonCommentShow});
+    </insert>
+
+    <delete id="deleteSonCommentByFid">
+        delete from son_comment where father_cid in
+        <foreach collection="sid" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSonCommentById">
+        delete from son_comment where s_id in
+        <foreach collection="sid" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findSonComCountByCid" resultType="int">
+        select count(*) from son_comment where father_cid in
+        <foreach collection="cid" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="findSonCommentCount" resultType="int">
+        select count(*) from son_comment;
+    </select>
+</mapper>

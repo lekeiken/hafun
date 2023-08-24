@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hafunstar.dao.ManagerDao">
+    <!--配置数据库表和java类的映射-->
+    <resultMap id="managerMap" type="Manager">
+        <!--主键配置-->
+        <id property="managerId" column="m_id"></id>
+        <!--非主键-->
+        <result property="managerNickname" column="m_nickname"></result>
+        <result property="managerName" column="m_name"></result>
+        <result property="managerPassword" column="m_password"></result>
+        <result property="managerLastTime" column="m_lastlogintime"></result>
+    </resultMap>
+
+    <!--登录查询-->
+    <select id="findManagerLogin" resultType="String" parameterType="String">
+        select m_password from manager where m_name = #{name};
+    </select>
+
+    <!-- 查询所有管理员-->
+    <select id="findManagerAll" resultMap="managerMap" parameterType="int">
+        select m_id,m_nickname,m_name,m_lastlogintime from manager limit #{pos},#{size};
+    </select>
+
+    <select id="findManagerNicknameById" resultType="String" parameterType="int">
+        select m_nickname from manager where m_id = #{id};
+    </select>
+    <select id="findManagerNameById" resultType="String" parameterType="int">
+        select m_name from manager where m_id = #{id};
+    </select>
+    <select id="findManagerPasswdById" resultType="String" parameterType="int">
+        select m_password from manager where m_id = #{id};
+    </select>
+
+    <!--保存一个管理员-->
+    <insert id="managerSave" parameterType="Manager">
+        insert into manager(m_nickname,m_name,m_password,m_lastlogintime) values (#{managerNickname},#{managerName},#{managerPassword},NOW());
+    </insert>
+
+    <!--删除一个管理员-->
+    <delete id="managerDeleteByBatch" parameterType="int">
+        delete from manager where m_id in
+        <foreach collection="ids" item="mid" open="(" separator="," close=")">
+            #{mid}
+        </foreach>
+    </delete>
+
+    <!--修改管理员密码-->
+    <update id="updatePasswd"  parameterType="Manager">
+        update manager set m_password = #{managerPassword} where m_name = #{managerName};
+    </update>
+
+    <!--修改管理员信息-->
+    <update id="changeManager" parameterType="Manager">
+        update manager set m_name = #{managerName},m_nickname = #{managerNickname},m_password = #{managerPassword} where m_id = #{managerId};
+    </update>
+
+    <!--更新管理员登录时间-->
+    <update id="updateLastTime" parameterType="String">
+        update manager set m_lastlogintime = NOW() where m_name = #{name};
+    </update>
+
+    <!--根据管理员名查询管理员昵称-->
+    <select id="nameToNickname" resultMap="managerMap" parameterType="String">
+        select m_nickname from manager where m_name = #{name};
+    </select>
+
+    <!--根据名字查询id 返回id=1是超级管理员-->
+    <select id="adminIsRoot" resultType="int" parameterType="String">
+        select m_id from manager where m_name = #{name};
+    </select>
+
+    <select id="adminCount" resultType="int">
+        select count(*) from manager;
+    </select>
+</mapper>

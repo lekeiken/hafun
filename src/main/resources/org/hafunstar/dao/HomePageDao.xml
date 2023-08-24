@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hafunstar.dao.HomePageDao">
+
+    <resultMap id="pageMap" type="HomePage">
+
+        <id property="pageId" column="p_id"></id>
+        <result column="is_new" property="pageIsNew"></result>
+        <result column="img_src" property="pageImg"></result>
+        <result column="game_name" property="pageGameName"></result>
+        <result column="platform" property="pagePlatform"></result>
+        <result column="game_type" property="pageGameType"></result>
+        <result column="producer" property="pageProducer"></result>
+        <result column="launch_date" property="pageLaunchDate"></result>
+        <result column="game_intro" property="pageGameIntro"></result>
+        <result column="xitong" property="pageSystem"></result>
+        <result column="cpu" property="pageCpu"></result>
+        <result column="neicun" property="pageMemory"></result>
+        <result column="yingpan" property="pageDisk"></result>
+        <result column="xianka" property="pageGraphics"></result>
+        <result column="i_evaluation" property="pageEvaluation"></result>
+        <result column="p_index" property="pageIndex"></result>
+    </resultMap>
+
+    <select id="findHomePageById" parameterType="int" resultMap="pageMap">
+        select  * from home_page where p_id = #{id};
+    </select>
+
+    <select id="findByStatusCode" parameterType="int" resultMap="pageMap">
+        select  * from home_page where is_new = #{code} order by p_id desc limit 1;
+    </select>
+
+    <insert id="savePageInfo" parameterType="HomePage" useGeneratedKeys="true" keyProperty="pageId">
+        insert into
+            home_page(img_src,game_name,game_type,producer,launch_date
+            ,game_intro,xitong,cpu,neicun,yingpan,xianka,i_evaluation,p_index,platform)
+         values (#{pageImg},#{pageGameName},#{pageGameType},#{pageProducer},#{pageLaunchDate},
+                 #{pageGameIntro},#{pageSystem},#{pageCpu},#{pageMemory},#{pageDisk},
+                 #{pageGraphics},#{pageEvaluation},#{pageIndex},#{pagePlatform})
+    </insert>
+
+    <update id="changePageInfo" parameterType="HomePage">
+        update home_page
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pageIsNew != null and pageIsNew != ''">
+                is_new = #{pageIsNew},
+            </if>
+            <if test="pageImg != null and pageImg != ''">
+                img_src = #{pageImg},
+            </if>
+            <if test="pageGameName != null and pageGameName != ''">
+                game_name = #{pageGameName},
+            </if>
+            <if test="pageGameType != null and pageGameType != ''">
+                game_type = #{pageGameType},
+            </if>
+            <if test="pagePlatform != null and pagePlatform != ''">
+                platform = #{pagePlatform},
+            </if>
+            <if test="pageProducer != null and pageProducer != ''">
+                producer= #{pageProducer},
+            </if>
+            <if test="pageLaunchDate != null and pageLaunchDate != ''">
+                launch_date = #{pageLaunchDate},
+            </if>
+            <if test="pageGameIntro != null and pageGameIntro != ''">
+                game_intro = #{pageGameIntro},
+            </if>
+            <if test="pageSystem != null and pageSystem != ''">
+                xitong = #{pageSystem},
+            </if>
+            <if test="pageCpu != null and pageCpu != ''">
+                cpu = #{pageCpu},
+            </if>
+            <if test="pageMemory != null and pageMemory != ''">
+                neicun = #{pageMemory},
+            </if>
+            <if test="pageDisk != null and pageDisk != ''">
+                yingpan = #{pageDisk},
+            </if>
+            <if test="pageGraphics != null and pageGraphics != ''">
+                xianka = #{pageGraphics},
+            </if>
+            <if test="pageEvaluation != null and pageEvaluation != ''">
+                i_evaluation = #{pageEvaluation},
+            </if>
+            <if test="pageIndex != null and pageIndex != ''">
+                p_index = #{pageIndex},
+            </if>
+
+        </trim>
+            where p_id = #{pageId};
+    </update>
+
+    <delete id="deletePageById" parameterType="int">
+        delete from home_page where p_id = #{id}
+    </delete>
+
+    <delete id="deletePageByInt" parameterType="int">
+        delete from home_page where is_new = #{id}
+    </delete>
+</mapper>

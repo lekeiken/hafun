@@ -1,0 +1,453 @@
+html,body{
+    margin: 0 ;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+}
+.main-wrap-box{
+    background-image:url('../images/8oky1j.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+
+}
+.main-wrap-box-bg{
+    background-image:url('../images/8oky1j.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.5;
+    filter: blur(20px);
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+}
+a{ text-decoration:none}
+.top-bar{
+    width: 100%;
+    height: 13%;
+}
+.logo{
+    width: 100px;
+    height: 60px;
+    position: relative;
+}
+.logo:after{
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 30px;
+    left: 60px;
+
+    box-shadow:0 0  10px 5px #00FFFF;
+}
+
+.logo img{
+    display: block;
+    width: 100px;
+    height: 60px;
+    position: absolute;
+    top: 30px;
+    left: 60px;
+}
+
+.login{
+    border-radius: 15px;
+    border: 1px solid black;
+    width: 80px;
+    height: 43px;
+    line-height:43px;
+    position:absolute;
+    top:30px;
+    right: 30px;
+}
+.login1{
+    width: 62px;
+    height: 62px;
+    position:absolute;
+    top:20px;
+    right: 20px;
+    border: 1px solid black;
+    border-radius:50%;
+}
+.u_menu_1{
+    width: 60px;
+    height: 60px;
+    border-radius:50%;
+    background-color:#D2691E;
+    position:absolute;
+    top:50px;
+    right: 20px;
+    font-size:13px;
+    font-family:"Microsoft YaHei";
+    text-align: center;
+    padding: 28px 0;
+    color: #000;
+    display: none;
+    text-decoration:none;
+}
+.u_menu_2{
+    width: 60px;
+    height: 60px;
+    border-radius:50%;
+    background-color:#7FFF00;
+    position:absolute;
+    top:80px;
+    right: 20px;
+    font-size:13px;
+    font-family:"Microsoft YaHei";
+    text-align: center;
+    padding: 28px 0;
+    color: #000;
+    display: none;
+    text-decoration: none;
+}
+.u_menu_1:hover{text-decoration:none}
+.u_menu_2:hover{text-decoration:none}
+.login:hover{
+    background-color:#FFA500;
+    box-shadow: -2px 3px 1px #9ACD32;
+}
+.login-font{
+    font-family: "Microsoft YaHei";
+    font-size: 0.9em;
+    color: 	#000000;
+    display:inline-block;
+    vertical-align:middle;
+    margin-left: 23px;
+}
+.login-img{
+    width: 60px;
+    height: 60px;
+    border-radius:50%;
+}
+.main-box{
+    width: 100%;
+    height: 80%;
+    /*background-color: #7e7e7e;   */
+}
+.leftcolumn{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position:relative;
+    left:50px;
+}
+.rightcolumn{
+    width: 40%;
+    height: 100%;
+    float: left;
+    position:relative;
+    left:50px;
+}
+.game-info{
+    width: 100%;
+    height: 60%;
+    /*background-color: #9a9a9a;*/
+    float: left;
+
+}
+.game-info-bg{
+    width: 580px;
+    height: 330px;
+    background-color: rgba(128,128,128,0.8);
+    -webkit-filter: blur(10px);
+    -moz-filter:blur(10px);
+    -o-filter:blur(10px);
+    -ms-filter:blur(10px);
+    filter: blur(10px);
+    position:absolute;
+    left: 40px;
+    top:15px;
+    display: none;
+}
+.game-img{
+    width: 130px;
+    height: auto;
+    position:absolute;
+    left: 80px;
+    top:20px;
+}
+
+.game-proper{
+    width: 280px;
+    height: auto;
+    position:absolute;
+    left: 260px;
+    top:20px;
+    font-family: "KaiTi";
+    font-weight:bold;
+    font-size: 16px;
+}
+.game-proper ul{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+.game-proper ul li{
+    margin: 15px 0px 15px 0px;
+}
+.game-jj{
+    width: 80%;
+    height: 80px;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    position:absolute;
+    left: 60px;
+    top:210px;
+    text-align:justify;
+    text-indent:25px;
+    line-height:160%;
+    letter-spacing:1px;
+    /*background-color: #fdfdfd;*/
+}
+
+.config-info{
+    width: 100%;
+    height: 40%;
+    /*background-color: #ababab;*/
+    float: left;
+}
+.config-info-bg{
+    width: 580px;
+    height: 180px;
+    background-color: rgba(18,132,190,0.8);
+    -webkit-filter: blur(10px);
+    -moz-filter:blur(10px);
+    -o-filter:blur(10px);
+    -ms-filter:blur(10px);
+    filter: blur(10px);
+    position:absolute;
+    left: 50px;
+    top:350px;
+    display: none;
+}
+.c-con{
+    position:relative;
+    left: 80px;
+    top: 20px;
+    width: 300px;
+}
+.c-con ul{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+.c-con ul li{
+    height: 30px;
+    margin: 5px 0px 5px 0px;
+}
+.c-con ul li span{
+    position:relative;
+    bottom: 10px;
+    left: 20px;
+}
+.eva{
+    width: 100%;
+    height: 5%;
+    margin: auto;
+}
+.content-txt{
+    width: 100%;
+    height: 95%;
+    overflow:auto;
+}
+.rightcolumn-bg{
+    width: 500px;
+    height:540px;
+    background-color: rgba(187,28,222,0.8);
+    -webkit-filter: blur(10px);
+    -moz-filter:blur(10px);
+    -o-filter:blur(10px);
+    -ms-filter:blur(10px);
+    filter: blur(10px);
+    position:absolute;
+    left: 675px;
+    top:90px;
+    display: none;
+}
+.bottom-box{
+    height: 7%;
+    width: 100%;
+}
+.btm-left{
+    height: 100%;
+    width: 70%;
+    float: left;
+
+}
+.btm-left input{
+    position: relative;
+    left: 330px;
+    top: 9px;
+    border-radius: 25px;
+    background: #8AC007;
+    width: 120px;
+    height: 32px;
+}
+.btm-right{
+    width: 30%;
+    float: left;
+    height:100%;
+
+}
+.btm-right input{
+    width: 80px;
+    height: 30px;
+    border-radius: 10px;
+    background: #D93B27;
+    position: relative;
+    left: 230px;
+    top: 9px;
+}
+.com-warp{
+    width: 100%;
+    height: auto;
+    background:	#F0F8FF;
+    float: left;
+}
+.comment-box-{
+    max-width: 60%;
+    height: auto;
+    margin-left:50px;
+    background-color: #F0F0F0;
+    outline-style:groove;
+    outline-color:	#B0B0B0;
+    outline-width:5px;
+    float: left;
+    display: inline-block;
+}
+
+.main-cmd{
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    margin: auto;
+    border-bottom: 1px solid #000;
+
+}
+
+.second-cmd{
+    width: 80%;
+    min-height: 150px;
+    background-color: #C0C0C0;
+    margin-left: 15% ;
+    border-radius:10px;
+    padding: 10px;
+}
+.c-username{
+    font-size: 16px;
+    font-family: "黑体";
+    font-weight:bold;
+
+    display: inline-block;
+}
+.c-username a{
+    text-decoration:none;
+}
+.floa{
+    float: left;
+}
+.main-left{
+    width: 15%;min-height: 150px;display: inline-block;
+}
+.main-right{
+    width: 85%;min-height: 150px;display: inline-block;
+}
+.a-second{
+
+}
+.shadow {-webkit-filter: drop-shadow(2px 2px 4px #808080);filter: drop-shadow(2px 2px 4px #808080);border-radius: 50%;}
+.bottom-warp{
+    width: 100%;
+    height:300px;
+    background-color: #343434;
+    float: left;
+}
+.agination{
+    position: relative;
+    left: 250px;
+}
+.Pagination{
+    position: relative;
+    left: 250px;
+}
+.not-log{
+    width: 60%;
+    height: 80px;
+    float: left;
+}
+.not-log span{
+    display:inline-block;
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    position: relative;
+    top:33%;
+    left: 40%;
+}
+.is-log{
+    width: 52%;
+    height: 62%;
+    margin: 50px 0px 80px 50px;
+    float: left;
+}
+.is-log-txt{
+    width: 100%;
+    height: 75%;
+    float: left;
+}
+.is-log-text{
+    width: 100%;
+    height: 100%;
+    resize:none;
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    padding: 5px;
+
+}
+.is-log-sub{
+    width: 100%;
+    height: 15%;
+    border: 1px solid #666;
+    background-color: #fff;
+    float: left;
+}
+.is-log-sub input{
+    width: 80px;
+    height: 40px;
+    float: right;
+    margin: 10px 20px 0px 0px;
+}
+
+.is-log-sub-a{
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin: 10px 0px 0px 10px;
+}
+.is-log-info{
+    width: 100%;
+    height: 10%;
+    float: left;
+    display: none;
+}
+.repley-info{
+    color: #286090;
+
+}
+
+/* 响应式布局 -屏幕尺寸小于 800px 时，两列布局改为上下布局 */
+@media screen and (max-width: 800px) {
+    .leftcolumn, .rightcolumn {
+        width: 100%;
+        padding: 0;
+    }
+}

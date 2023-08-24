@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hafunstar.dao.CommentDao">
+    <!--配置数据库表和java类的映射-->
+    <resultMap id="CommentMap" type="Comment">
+        <id property="commentId" column="c_id"></id>
+        <result property="commentContent" column="c_content"></result>
+        <result property="commentTime" column="c_time"></result>
+        <result property="commentShow" column="c_show"></result>
+        <association property="account" javaType="Account">
+            <id property="accountId" column="u_id"></id>
+            <result property="accountName" column="u_username"></result>
+            <result property="accountImgUrl" column="u_img"></result>
+        </association>
+        <association property="homePage" javaType="HomePage">
+            <id property="pageId" column="p_id"></id>
+            <result property="pageGameName" column="game_name"></result>
+        </association>
+        <collection property="sonComList" ofType="SonComment">
+            <id property="sonCommentId" column="s_id"></id>
+            <result property="fatherCommentId" column="father_cid"></result>
+            <result property="commentContent" column="s_content"></result>
+            <result property="commentTime" column="s_time"></result>
+            <result property="sonCommentShow" column="s_show"></result>
+            <association property="comUser" javaType="Account">
+                <id column="uid" property="accountId"></id>
+                <result column="uname" property="accountName"></result>
+
+            </association>
+            <association property="replyUser" javaType="Account" >
+                <id column="eid" property="accountId"></id>
+                <result column="replyname" property="accountName"></result>
+
+            </association>
+        </collection>
+    </resultMap>
+    <resultMap type="java.lang.Integer" id="count">
+        <result column="nums"/>
+    </resultMap>
+
+    <select id="findCommentAll" resultMap="CommentMap">
+        select c.c_id,
+               c.c_content,
+               c.c_time,
+               c.c_show,
+               u.u_id AS u_id,
+               u.u_username AS u_username,
+               p.p_id AS p_id,
+               p.game_name AS game_name,
+                s.s_id AS s_id,
+               s.father_cid AS father_cid,
+               s.s_content AS s_content,
+               s.s_time AS s_time,
+               s.s_show AS s_show,
+               s.uid AS uid,
+               s.uname AS uname,
+               s.eid AS eid,
+               s.replyname AS replyname
+        from comment c JOIN users u ON c.u_id = u.u_id
+                       JOIN home_page p ON c.p_id = p.p_id
+        LEFT JOIN (select
+                  s.s_id,
+                  s.father_cid,
+                  s.s_content,
+                  s.s_time,
+                  s.s_show,
+                  u.u_id AS uid,
+                  u.u_username AS uname,
+                  e.u_id AS eid,
+                  e.u_username AS replyname
+              from son_comment s JOIN users u ON s.uid = u.u_id
+                                 JOIN users e ON s.reply_uid = e.u_id) s ON c.c_id = s.father_cid
+        ORDER BY c.c_id DESC limit #{pos},#{size};
+    </select>
+
+    <select id="findCommentByAccount" resultMap="CommentMap" parameterType="String">
+        select c.c_id,
+               c.c_content,
+               c.c_time,
+               c.c_show,
+               u.u_id AS u_id,
+               u.u_username AS u_username,
+               p.p_id AS p_id,
+               p.game_name AS game_name,
+               s.s_id AS s_id,
+               s.father_cid AS father_cid,
+               s.s_content AS s_content,
+               s.s_time AS s_time,
+               s.s_show AS s_show,
+               s.uid AS uid,
+               s.uname AS uname,
+               s.eid AS eid,
+               s.replyname AS replyname
+        from comment c JOIN users u ON c.u_id = u.u_id
+                       JOIN home_page p ON c.p_id = p.p_id
+                       LEFT JOIN (select
+                                      s.s_id,
+                                      s.father_cid,
+                                      s.s_content,
+                                      s.s_time,
+                                      s.s_show,
+                                      u.u_id AS uid,
+                                      u.u_username AS uname,
+                                      e.u_id AS eid,
+                                      e.u_username AS replyname
+                                  from son_comment s JOIN users u ON s.uid = u.u_id
+                                                     JOIN users e ON s.reply_uid = e.u_id
+        ) s ON c.c_id = s.father_cid
+        where u_username = #{username}
+        UNION
+        select c.c_id,
+               c.c_content,
+               c.c_time,
+               c.c_show,
+               u.u_id AS u_id,
+               u.u_username AS u_username,
+               p.p_id AS p_id,
+               p.game_name AS game_name,
+               s.s_id AS s_id,
+               s.father_cid AS father_cid,
+               s.s_content AS s_content,
+               s.s_time AS s_time,
+               s.s_show AS s_show,
+               s.uid AS uid,
+               s.uname AS uname,
+               s.eid AS eid,
+               s.replyname AS replyname
+        from comment c JOIN users u ON c.u_id = u.u_id
+                       JOIN home_page p ON c.p_id = p.p_id
+                       RIGHT JOIN (select
+                                       s.s_id,
+                                       s.father_cid,
+                                       s.s_content,
+                                       s.s_time,
+                                       s.s_show,
+                                       u.u_id AS uid,
+                                       u.u_username AS uname,
+                                       e.u_id AS eid,
+                                       e.u_username AS replyname
+                                   from son_comment s JOIN users u ON s.uid = u.u_id
+                                                      JOIN users e ON s.reply_uid = e.u_id
+        ) s ON c.c_id = s.father_cid
+        where uname = #{username}
+        ORDER BY c_id DESC;
+    </select>
+
+    <select id="findCommentByPageId" resultMap="CommentMap">
+        select
+            c.c_id,
+               c.c_content,
+               c.c_time,
+               c.c_show,
+               u.u_id AS u_id,
+               u.u_username AS u_username,
+               u.u_img AS u_img,
+               p.p_id AS p_id,
+               p.game_name AS game_name,
+               s.s_id AS s_id,
+               s.father_cid AS father_cid,
+               s.s_content AS s_content,
+               s.s_time AS s_time,
+               s.s_show AS s_show,
+               s.uid AS uid,
+               s.uname AS uname,
+               s.eid AS eid,
+               s.replyname AS replyname
+        from comment c JOIN users u ON c.u_id = u.u_id
+                       JOIN home_page p ON c.p_id = p.p_id
+                       LEFT JOIN (select
+                                      s.s_id,
+                                      s.father_cid,
+                                      s.s_content,
+                                      s.s_time,
+                                      s.s_show,
+                                      u.u_id AS uid,
+                                      u.u_username AS uname,
+                                      e.u_id AS eid,
+                                      e.u_username AS replyname
+                                  from son_comment s JOIN users u ON s.uid = u.u_id
+                                                     JOIN users e ON s.reply_uid = e.u_id) s ON c.c_id = s.father_cid
+        where p.p_id = #{id}
+        ORDER BY c.c_id DESC limit #{pos},#{size};
+    </select>
+    <select id="findCommentByGame" resultMap="CommentMap,count">
+        select SQL_CALC_FOUND_ROWS
+               c.c_id,
+               c.c_content,
+               c.c_time,
+               c.c_show,
+               u.u_id AS u_id,
+               u.u_username AS u_username,
+               p.p_id AS p_id,
+               p.game_name AS game_name,
+               s.s_id AS s_id,
+               s.father_cid AS father_cid,
+               s.s_content AS s_content,
+               s.s_time AS s_time,
+               s.s_show AS s_show,
+               s.uid AS uid,
+               s.uname AS uname,
+               s.eid AS eid,
+               s.replyname AS replyname
+        from comment c JOIN users u ON c.u_id = u.u_id
+                       JOIN home_page p ON c.p_id = p.p_id
+                       LEFT JOIN (select
+                                      s.s_id,
+                                      s.father_cid,
+                                      s.s_content,
+                                      s.s_time,
+                                      s.s_show,
+                                      u.u_id AS uid,
+                                      u.u_username AS uname,
+                                      e.u_id AS eid,
+                                      e.u_username AS replyname
+                                  from son_comment s JOIN users u ON s.uid = u.u_id
+                                                     JOIN users e ON s.reply_uid = e.u_id) s ON c.c_id = s.father_cid
+        where game_name = #{name}
+        ORDER BY c.c_id DESC limit #{pos},#{size};
+        SELECT found_rows() AS nums;
+    </select>
+
+    <select id="findCommentById" resultMap="CommentMap" parameterType="int">
+        select c.c_id,
+               c.c_content,
+               c.c_time,
+               c.c_show,
+               u.u_id AS u_id,
+               u.u_username AS u_username,
+               p.p_id AS p_id,
+               p.game_name AS game_name,
+               s.s_id AS s_id,
+               s.father_cid AS father_cid,
+               s.s_content AS s_content,
+               s.s_time AS s_time,
+               s.s_show AS s_show,
+               s.uid AS uid,
+               s.uname AS uname,
+               s.eid AS eid,
+               s.replyname AS replyname
+        from comment c JOIN users u ON c.u_id = u.u_id
+                       JOIN home_page p ON c.p_id = p.p_id
+                       LEFT JOIN (select
+                                      s.s_id,
+                                      s.father_cid,
+                                      s.s_content,
+                                      s.s_time,
+                                      s.s_show,
+                                      u.u_id AS uid,
+                                      u.u_username AS uname,
+                                      e.u_id AS eid,
+                                      e.u_username AS replyname
+                                  from son_comment s JOIN users u ON s.uid = u.u_id
+                                                     JOIN users e ON s.reply_uid = e.u_id) s ON c.c_id = s.father_cid
+    where c.c_id = #{id};
+    </select>
+
+    <insert id="saveComment" parameterType="Comment">
+        insert into comment(c_content,c_time,u_id,p_id,c_show)
+        values(#{commentContent},#{commentTime},#{account.accountId},#{homePage.pageId},#{commentShow});
+    </insert>
+
+    <delete id="deleteCommentById">
+        delete from comment where c_id in
+        <foreach collection="cid" open="(" close=")" separator="," item="id">
+        #{id}
+        </foreach>
+    </delete>
+
+    <!--根据主页id查所有的评论id-->
+    <select id="findCidByPid" resultMap="CommentMap" parameterType="int">
+        select
+            c.c_id
+        from comment c JOIN home_page p ON c.p_id = p.p_id
+        where c.p_id = #{id};
+    </select>
+
+    <select id="findCidByTop" resultType="int">
+        select
+            c_id
+        from comment  ORDER BY c_id DESC limit #{pos},#{size};
+    </select>
+
+    <select id="findCommentCount" resultType="int">
+        select count(*) from comment;
+    </select>
+
+    <select id="findCommentCountByPid" resultType="int" parameterType="int">
+        select count(*) from comment where p_id = #{id};
+    </select>
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hafunstar.dao.AccountDao">
+
+    <resultMap id="accountMap" type="Account">
+        <id property="accountId" column="u_id"></id>
+        <result property="accountName" column="u_username"></result>
+        <result property="accountPasswd" column="u_password"></result>
+        <result property="accountEmail" column="u_Email"></result>
+        <result property="accountImgUrl" column="u_img"></result>
+        <result property="isActivate" column="is_activate"></result>
+        <result property="accountRegTime" column="u_regtime"></result>
+    </resultMap>
+
+
+    <select id="findAccountAll" resultMap="accountMap">
+        select u_id,u_username,u_Email,u_img,is_activate,u_regtime from users limit #{pos},#{size};
+    </select>
+
+    <select id="findIdByName" resultMap="accountMap" parameterType="String">
+        select u_id,u_username from users where u_Email = #{name,jdbcType=VARCHAR};
+    </select>
+
+    <select id="findAccountByEmailAndPasswd" resultMap="accountMap" parameterType="String">
+        select u_id,u_password from users where u_Email = #{name,jdbcType=VARCHAR};
+    </select>
+
+    <select id="findNameRepeat" resultMap="accountMap" parameterType="String">
+        select u_id from users where u_username = #{name,jdbcType=VARCHAR};
+    </select>
+
+    <!--根据条件搜索用户所有信息-->
+    <select id="findAccountById" resultMap="accountMap" parameterType="int">
+        select u_id,u_username,u_Email,u_img,is_activate,u_regtime from users where u_id = #{id};
+    </select>
+
+    <select id="findAccountByName" resultMap="accountMap" parameterType="String">
+        select u_id,u_username,u_Email,u_img,is_activate,u_regtime from users where u_username like concat('%',#{name,jdbcType=VARCHAR},'%');
+    </select>
+
+    <select id="findAccountByEmail" resultMap="accountMap" parameterType="String">
+        select u_id,u_username,u_Email,u_img,is_activate,u_regtime from users where u_Email = #{number,jdbcType=VARCHAR};
+    </select>
+
+    <!--根据id查用户的单个信息-->
+    <select id="findAccountEmailById" resultType="String" parameterType="int">
+        select u_Email from users where u_id = #{id};
+    </select>
+    <select id="findAccountNameById" resultType="String" parameterType="int">
+        select u_username from users where u_id = #{id};
+    </select>
+    <select id="findAccountPasswdById" resultType="String" parameterType="int">
+        select u_password from users where u_id = #{id};
+    </select>
+    <select id="findAccountActivateById" resultType="int" parameterType="int">
+        select is_activate from users where u_id = #{id};
+    </select>
+
+    <insert id="saveAccount" parameterType="Account">
+        insert into users(u_username,u_password,u_Email,u_img,is_activate,u_regtime)
+        values (#{accountName},#{accountPasswd},#{accountEmail},#{accountImgUrl},#{isActivate},NOW());
+    </insert>
+
+    <!--修改客户信息-->
+    <update id="changeAccount" parameterType="Account">
+        update users set u_username = #{accountName},
+                         u_password = #{accountPasswd},
+                         u_Email = #{accountEmail},
+                         is_activate = #{isActivate}
+        where u_id = #{accountId};
+    </update>
+    <!--修改客户密码-->
+    <update id="changeAccountPassword" parameterType="Account">
+        update users set
+                         u_password = #{accountPasswd}
+        where u_Email = #{accountEmail};
+    </update>
+
+    <update id="updateAccountImgUrl" parameterType="Account">
+        update users set u_img = #{accountImgUrl} where u_Email = #{accountEmail};
+    </update>
+
+    <update id="updateAccountActivate" parameterType="int">
+        update users set is_activate = 1 where u_id = #{id};
+    </update>
+
+    <delete id="deleteAccount">
+        delete from users where u_id in
+        <foreach collection="uid" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findIdToImgUrl" resultMap="accountMap" parameterType="int">
+        select u_img from users where u_id = #{uid};
+    </select>
+
+    <select id="findUserCount" resultType="int">
+        select count(*) from users;
+    </select>
+
+
+</mapper>

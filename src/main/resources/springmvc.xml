@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- mvc注解解析器-->
+
+    <mvc:annotation-driven/>
+
+    <!-- 自动扫描包,只扫描Controller注解-->
+    <context:component-scan base-package="org.hafunstar">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="InternalResourceViewResolver">
+        <!--前缀-->
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <!--后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 让Spring MVC不处理静态资源 -->
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/images/" mapping="/images/**"/>
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/uploads/" mapping="/uploads/**"/>
+    <mvc:resources location="/dist/" mapping="/dist/**"/>
+
+    <!-- 配置拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 拦截判断登录状态提取token中的用户名 -->
+            <mvc:mapping path="/"/>
+
+            <mvc:mapping path="/Comment/*"/>
+
+            <bean class="org.hafunstar.interceptor.IndexInterceptor"/>
+
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 拦截登录后才可以访问-->
+            <mvc:mapping path="/cmtPage"/><!-- 评论分页-->
+
+            <mvc:mapping path="/CMT/**"/> <!-- 评论-->
+
+            <bean class="org.hafunstar.interceptor.AccountLoginCheckInterceptor"/>
+
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 拦截的方法 -->
+            <mvc:mapping path="/manager/**"/>
+
+            <mvc:exclude-mapping path="/manager/adminLogin"/>
+
+            <mvc:exclude-mapping path="/manager/0"/>
+
+            <bean class="org.hafunstar.interceptor.AdminInterceptor"/>
+        </mvc:interceptor>
+
+
+    </mvc:interceptors>
+
+    <!--配置异常处理器-->
+    <bean id="exceptionResolver" class="org.hafunstar.exception.SysExceptionResolver"></bean>
+
+
+    <!--文件解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+
+
+</beans>
